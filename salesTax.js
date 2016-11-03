@@ -23,27 +23,21 @@ var companySalesData = [
 ];
 
 function calcSalesTotals(salesData) {
-  var answer = [];
+  var salesDataSum = [];
   for(var i = 0; i < salesData.length; i += 1) {
     var companyInProv = salesData[i];
-    var partialAnswer = {
+    var partialSalesData = {
       name: companyInProv.name,
       province: companyInProv.province
     };
-    partialAnswer.totalSales =
+    partialSalesData.totalSales =
       companyInProv.sales.reduce(function(runTotal, currTotal) {
         return runTotal + currTotal;
       }, 0);
-    answer.push(partialAnswer);
-    // console.log(answer);
+    salesDataSum.push(partialSalesData);
   }
-  return answer;
-  // console.log(answer);
+  return salesDataSum;
 }
-
-var newData = calcSalesTotals(companySalesData);
-
-// console.log(newData);
 
 function calculateSalesData(salesData, rates) {
   for(var i = 0; i < salesData.length; i += 1) {
@@ -56,11 +50,7 @@ function calculateSalesData(salesData, rates) {
   return salesData;
 }
 
-var newData2 = calculateSalesData(newData, salesTaxRates);
-
-// console.log(newData2);
-
-function addTotals(salesData) {
+function addCompanyTotals(salesData) {
   var company = {};
   for(var i = 0; i < salesData.length; i += 1) {
     name = salesData[i].name;
@@ -79,20 +69,12 @@ function addTotals(salesData) {
   return company;
 }
 
-var newData3 = addTotals(newData2);
+function salesTaxReport(salesData, taxRates) {
+  totalSales = calcSalesTotals(salesData);
+  totalSalesAndTax = calculateSalesData(totalSales, taxRates);
+  return addCompanyTotals(totalSalesAndTax);
+}
 
-console.log(addTotals(newData2));
+var results = salesTaxReport(companySalesData, salesTaxRates);
 
-
-
-
-
-
-// console.log("work in progress: ", salesData(companySalesData));
-
-// function calculateSalesTax(salesData, taxRates) {
-//
-// }
-//
-
-// var results = salesTaxReport(companySalesData, salesTaxRates);
+console.log(results);
