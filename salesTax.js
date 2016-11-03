@@ -24,8 +24,8 @@ var companySalesData = [
 
 function calcSalesTotals(salesData) {
   var answer = [];
-  for(var i = 0; i < data.length; i += 1) {
-    var companyInProv = data[i];
+  for(var i = 0; i < salesData.length; i += 1) {
+    var companyInProv = salesData[i];
     var partialAnswer = {
       name: companyInProv.name,
       province: companyInProv.province
@@ -45,22 +45,43 @@ var newData = calcSalesTotals(companySalesData);
 
 // console.log(newData);
 
-function calcSalesTax(salesData, rates) {
+function calculateSalesData(salesData, rates) {
   for(var i = 0; i < salesData.length; i += 1) {
     var province = salesData[i].province;
-    var taxRate = rates[province];
+    var provRate = rates[province];
     var totalSales = salesData[i].totalSales;
-    var totalTax = taxRate * totalSales;
+    var totalTax = provRate * totalSales;
     salesData[i].totalTax = totalTax;
   }
   return salesData;
 }
 
-var newData2 = calcSalesTax(newData, salesTaxRates);
+var newData2 = calculateSalesData(newData, salesTaxRates);
 
-console.log(newData2);
+// console.log(newData2);
 
+function addTotals(salesData) {
+  var company = {};
+  for(var i = 0; i < salesData.length; i += 1) {
+    name = salesData[i].name;
+    totalSalesValue = salesData[i].totalSales;
+    totalTaxesValue = salesData[i].totalTax;
+    if (!company[name]) {
+      company[name] = {
+        totalSales: totalSalesValue,
+        totalTaxes: totalTaxesValue
+      }
+    } else {
+      company[name].totalSales += salesData[i].totalSales;
+      company[name].totalTaxes += salesData[i].totalTax;
+    }
+  }
+  return company;
+}
 
+var newData3 = addTotals(newData2);
+
+console.log(addTotals(newData2));
 
 
 
@@ -73,6 +94,5 @@ console.log(newData2);
 //
 // }
 //
-
 
 // var results = salesTaxReport(companySalesData, salesTaxRates);
